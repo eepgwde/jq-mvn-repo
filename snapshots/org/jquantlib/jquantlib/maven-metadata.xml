@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>org.jquantlib</groupId>
+  <artifactId>jquantlib</artifactId>
+  <version>0.2.4</version>
+  <versioning>
+    <versions>
+      <version>0.2.4</version>
+    </versions>
+    <lastUpdated>20120414094322</lastUpdated>
+  </versioning>
+</metadata>
