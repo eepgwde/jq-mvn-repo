@@ -428,7 +428,7 @@
                         <configuration>
                             <rules>
                                 <requireJavaVersion>
-                                    <version>[1.6.0-21,1.7)</version>
+                                    <version>[1.6.0-21,1.7.0-3]</version>
                                 </requireJavaVersion>
                             </rules>
                         </configuration>
