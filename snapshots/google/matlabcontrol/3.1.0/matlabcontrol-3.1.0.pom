@@ -1,0 +1,252 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>google</groupId>
+    <artifactId>matlabcontrol</artifactId>
+    <packaging>jar</packaging>
+    <version>3.1.0</version>
+    <name>matlabcontrol</name>
+    <url>http://maven.apache.org</url>
+    
+    
+    <prerequisites>
+        <maven>2.2.1</maven>
+    </prerequisites>
+    
+    <properties>
+        <props.compile.jdk.source>1.6</props.compile.jdk.source>
+        <props.compile.jdk.target>1.6</props.compile.jdk.target>
+        <props.compile.meminitial>128m</props.compile.meminitial>
+        <props.compile.maxmem>512m</props.compile.maxmem>
+        <props.compile.fork>true</props.compile.fork>
+	<!-- Be cautious: may fork a different JVM -->
+        
+        <!-- maven-site-plugin deploys to host 'apache' via scp -->
+        <props.site.deploy.url>scp://apache/srv/fpstats.org/sites</props.site.deploy.url>
+    </properties>
+    
+    <repositories>
+        <repository>
+            <id>maven2-repository.dev.java.net</id>
+            <name>Java.net Repository for Maven</name>
+            <url>http://download.java.net/maven/2/</url>
+            <layout>default</layout>
+        </repository>
+    </repositories>
+    
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>net.sf.doodleproject</groupId>
+                    <artifactId>doxygen-maven-plugin</artifactId>
+                    <version>2.2</version>
+                </plugin>
+                
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>properties-maven-plugin</artifactId>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>failsafe-maven-plugin</artifactId>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>jdepend-maven-plugin</artifactId>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>findbugs-maven-plugin</artifactId>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-pmd-plugin</artifactId>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jxr-plugin</artifactId>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>taglist-maven-plugin</artifactId>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        
+        <plugins>
+            <plugin>
+                <groupId>net.sf.doodleproject</groupId>
+                <artifactId>doxygen-maven-plugin</artifactId>
+                <configuration>
+                    <alphabeticalIndex>true</alphabeticalIndex>
+                    <generateHtml>true</generateHtml>
+                    <inputDirectory>${basedir}/src/main/java</inputDirectory>
+                    <recursive>true</recursive>
+                    <executable>/usr/bin/doxygen</executable>
+                </configuration>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>enforce-versions</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireJavaVersion>
+                                    <version>[1.6.0-21,1.7)</version>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>buildNumber</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>set-system-properties</goal>
+                        </goals>
+                        <configuration>
+                            <properties>
+                                <property>
+                                    <name>buildNumber</name>
+                                    <value>none</value>
+                                </property>
+                            </properties>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>props.tests.skip</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>set-system-properties</goal>
+                        </goals>
+                        <configuration>
+                            <properties>
+                                <property>
+                                    <name>props.tests.skip</name>
+                                    <value>false</value>
+                                </property>
+                            </properties>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>info</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <echo>project.groupId=${project.groupId}</echo>
+                                <echo>project.artifactId=${project.artifactId}</echo>
+                                <echo>project.version=${project.version}</echo>
+                                <echo>buildNumber=${buildNumber}</echo>
+                                <echo>user.home=${user.home}</echo>
+                                <echo>basedir=${basedir}</echo>
+                                <echo>java.version=${java.version}</echo>
+                                <echo>java.vm.version=${java.vm.version}</echo>
+                                <echo>java.home=${java.home}</echo>
+                                <echo>java.endorsed.dirs=${java.endorsed.dirs}</echo>
+                                <echo>java.ext.dirs=${java.ext.dirs}</echo>
+                                <echo>java.library.path=${java.library.path}</echo>
+                                <echo>java.runtime.version=${java.runtime.version}</echo>
+                                <echo>java.specification.version=${java.specification.version}</echo>
+                                <echo>props.tests.skip=${props.tests.skip}</echo>
+                                <!-- echo>PATH=${env.PATH}</echo -->
+                            </tasks>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${props.compile.jdk.source}</source>
+                    <target>${props.compile.jdk.target}</target>
+                    <encoding>ISO-8859-2</encoding>
+                    <meminitial>${props.compile.meminitial}</meminitial>
+                    <maxmem>${props.compile.maxmem}</maxmem>
+                    <fork>${props.compile.fork}</fork>
+                </configuration>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <index>true</index>
+                        <manifest>
+                            <mainClass>${maven.jar.manifest.dummy.class}</mainClass>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <addExtensions>true</addExtensions>
+                        </manifest>
+                        <manifestEntries>
+                            <Specification-Title>FPStats</Specification-Title>           <!-- hardcoded :: never changes  -->
+                            <Specification-Vendor>FPStats</Specification-Vendor>         <!-- hardcoded :: never changes  -->
+                            <Specification-Version>0.9.7</Specification-Version>          <!-- hardcoded :: changes rarely -->
+                            <Implementation-Title>${project.name}</Implementation-Title>
+                            <Implementation-Vendor>JFPStats</Implementation-Vendor>      <!-- hardcoded :: never changes  -->
+                            <Implementation-Version>${project.version}</Implementation-Version>
+                            <Implementation-Build>${buildNumber}</Implementation-Build>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+            
+        </plugins>
+    </build>
+    
+    <dependencies>
+        <dependency>
+            <groupId>com.mathworks.matlab</groupId>
+            <artifactId>JMI</artifactId>
+            <version>7.1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>
