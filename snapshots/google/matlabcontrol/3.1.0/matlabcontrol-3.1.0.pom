@@ -8,7 +8,6 @@
     <name>matlabcontrol</name>
     <url>http://maven.apache.org</url>
     
-    
     <prerequisites>
         <maven>2.2.1</maven>
     </prerequisites>
@@ -24,7 +23,7 @@
         <!-- maven-site-plugin deploys to host 'apache' via scp -->
         <props.site.deploy.url>scp://apache/srv/fpstats.org/sites</props.site.deploy.url>
     </properties>
-    
+
     <repositories>
         <repository>
             <id>maven2-repository.dev.java.net</id>
@@ -33,6 +32,19 @@
             <layout>default</layout>
         </repository>
     </repositories>
+
+  <distributionManagement>
+    <repository>
+      <id>jq-releases</id>
+      <name>jq-releases</name>
+      <url>file:///misc/build/jq-mvn-repo/releases</url>
+    </repository>
+    <snapshotRepository>
+      <id>jq-snapshots</id>
+      <name>jq-snapshots</name>
+      <url>file:///misc/build/jq-mvn-repo/snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
     
     <build>
         <pluginManagement>
@@ -242,10 +254,24 @@
             <version>7.1.0</version>
         </dependency>
 
+        <!-- logging compile and test scope dependencies -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.4.0</version>
+            <scope>compile</scope>
+        </dependency>
+
+	<dependency>
+	  <groupId>org.slf4j</groupId>
+	  <artifactId>slf4j-log4j12</artifactId>
+	  <version>1.4.0</version>
+	</dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>3.8.1</version>
+            <version>4.4</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

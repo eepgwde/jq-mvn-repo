@@ -30,7 +30,7 @@ d_deploy () {
 		echo $PWD
 	    fi
 
-	    $nodo mvn -DaltDeploymentRepository=snapshot-repo::default::file:$d_service clean deploy
+	    $nodo mvn -DaltDeploymentRepository=snapshot-repo::default::file:$d_service ${d_aflag:+"-DskipTests"} clean deploy
 	    cd - > /dev/null 2>&1 
 	    ;;
 
